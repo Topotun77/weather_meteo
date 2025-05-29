@@ -23,4 +23,3 @@ router.register(r'stats', views.CityStatsViewSet)
 
 urlpatterns = router.urls
 urlpatterns.append(path('get-cities/', views.get_cities, name='get_cities'),)
-# print(urlpatterns)

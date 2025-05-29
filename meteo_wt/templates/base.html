@@ -16,7 +16,7 @@
 <body>
     <div class="navbar">
         <a href="{% url 'home' %}">Домой</a>
-        <a href="{% url 'meteo_app:meteo_request' %}">Прогноза на 7 дней</a>
+        <a href="{% url 'meteo_app:meteo_request' %}">Прогноз на 7 дней</a>
         {% if user.is_authenticated %}
             {% if user.is_superuser %}
               <a href="{% url 'meteo_app:user_stat_list' %}">Статистика</a>
