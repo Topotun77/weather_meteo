@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Прогноз погоды{% endblock %}</title>
+    {% if user_pref.theme != 'dark' %}
+      <link rel="stylesheet" type="text/css" href='{% static "meteo_wt/style-day.css" %}'>
+    {% else %}
+      <link rel="stylesheet" type="text/css" href='{% static "meteo_wt/style-night.css" %}'>
+    {% endif %}
+    <link rel="icon" href="{% static 'favicon.png' %}" />
+<!--    <script src="{% static 'reload.js' %}" charset="UTF-8"></script>-->
+
+</head>
+<body>
+    <div class="navbar">
+        <a href="{% url 'home' %}">Домой</a>
+        <a href="{% url 'meteo_app:meteo_request' %}">Прогноза на 7 дней</a>
+        {% if user.is_authenticated %}
+            {% if user.is_superuser %}
+              <a href="{% url 'meteo_app:user_stat_list' %}">Статистика</a>
+            {% endif %}
+            <a href="{% url 'logout' %}">Выход (<span class="small_font">{{user}}</span>)</a>
+            <a href="?day=theme" title="Светлая/темная тема">
+                {% if user_pref.theme != 'dark' %}
+                  <img src="{% static 'meteo_wt/day.png' %}" width="34">
+                {% else %}
+                  <img src="{% static 'meteo_wt/night.png' %}" width="34">
+                {% endif %}
+            </a>
+        {% else %}
+            <a href="{% url 'login' %}">Вход</a>
+            <a href="{% url 'signup' %}">Регистрация</a>
+        {% endif %}
+    </div>
+
+    {% block content %}
+    {% endblock %}
+
+<br>  <hr>
+    © Svetlana Pavlova
+    <br> Пишите нам на почту: ✉<a href="mailto:mail@mail.ru"> mail@mail.ru </a>
+    <br>  <br>
+
+<script src="{% static 'city.js' %}" charset="UTF-8"></script>
+</body>
+</html>

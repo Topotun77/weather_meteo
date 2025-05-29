@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>
+    {% if title2 %}
+      {{ title2 }}
+    {% else %}
+      Прогноз погоды
+    {% endif %}
+  </h1>
+  <hr>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+    </table>
+    <ul id="citySuggestions"></ul>
+    <button type="submit">Готово!</button>
+  </form>
+
+  {% if error %}
+    <hr>
+    <p class="red-text">{{ error }}</p>
+  {% endif %}
+  {% if hourly_data %}
+    <hr>
+    <h2>Часовые температуры для города {{ city }}</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Время</th>
+            <th>Температура, °C</th>
+          </tr>
+        </thead>
+        {% for time, temp in hourly_data %}
+          <tr class="align_left">
+            <td>
+              {{ time }}
+            </td>
+            <td>
+              {{ temp }}
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    <hr>
+    <h2>Ежедневные максимальные и минимальные температуры для города {{ city }}</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Дата</th>
+            <th>Температура max, °C</th>
+            <th>Температура min, °C</th>
+          </tr>
+        </thead>
+        {% for time, temp_max, temp_min in daily_data %}
+          <tr class="align_left">
+            <td>
+              {{ time }}
+            </td>
+            <td>
+              {{ temp_max }}
+            </td>
+            <td>
+              {{ temp_min }}
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+
+  {% endif %}
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Статистика по пользователям</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Пользователь</th>
+      <th>Город</th>
+      <th>Период</th>
+      <th>Дата</th>
+    </tr>
+  </thead>
+  {% for ind in user_stat %}
+    <tr class="align_left">
+      <td>
+        {{ ind.user.username }}
+      </td>
+      <td>
+        {{ ind.city }}
+      </td>
+      <td>
+        {{ ind.period }}
+      </td>
+      <td>
+        {{ ind.created_at }}
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

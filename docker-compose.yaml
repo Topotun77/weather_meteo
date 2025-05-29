@@ -1,0 +1,59 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: meteo_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345678
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-U", "admin" ]
+
+  app:
+    build:
+      context: .
+    container_name: meteo_app
+    ports:
+      - 3456:8000
+    environment:
+      PG_NAME: meteo_db
+      PG_USER: postgres
+      PG_PASSWORD: 12345678
+      PG_HOST: db
+    depends_on:
+      - db
+
+  db-migrations:
+    image: meteo_app
+    environment:
+      PG_NAME: meteo_db
+      PG_USER: postgres
+      PG_PASSWORD: 12345678
+      PG_HOST: db
+    command: bash -c "make migrate"
+    depends_on:
+      db:
+        condition: service_healthy
+      app:
+        condition: service_started
+
+  backend-superuser:
+    image: meteo_app
+    environment:
+      PG_NAME: meteo_db
+      PG_USER: postgres
+      PG_PASSWORD: 12345678
+      PG_HOST: db
+      DJANGO_SUPERUSER_USERNAME: superadm
+      DJANGO_SUPERUSER_PASSWORD: superadm
+      DJANGO_SUPERUSER_EMAIL: mail@mail.ru
+    command: bash -c "make create-superuser"
+    depends_on:
+      db:
+        condition: service_healthy
+      app:
+        condition: service_started
+      db-migrations:
+        condition: service_started

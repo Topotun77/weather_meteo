@@ -1,0 +1,8 @@
+2025-05-29 18:56:53,349 | INFO | django.utils.autoreload | Watching for file changes with StatReloader
+2025-05-29 18:57:16,904 | INFO | root | Запрос пользователя svetlana: Мариуполь
+2025-05-29 19:11:57,289 | INFO | root | Запрос списка городов /api/stat_api_app/get-cities/
+2025-05-29 19:13:21,551 | INFO | root | Запрос списка городов /api/stat_api_app/get-cities/
+2025-05-29 19:13:44,784 | INFO | root | Запрос списка городов /api/stat_api_app/get-cities/
+2025-05-29 19:13:52,557 | INFO | root | Запрос пользователя svetlana: прлдапвллап
+2025-05-29 19:13:52,817 | ERROR | root | Ошибка при получении координат: 'NoneType' object has no attribute 'latitude'
+2025-05-29 19:13:52,849 | INFO | root | Запрос списка городов /api/stat_api_app/get-cities/
