@@ -64,12 +64,12 @@ def request_weather(city_name) -> list | str:
     :return: прогноз погоды или текст ошибки
     """
     try:
-        city = CityStat.object.get(city=city_name)
-        if city.latitude or city.longitude:
+        city = CityStat.objects.get(city=city_name)
+        if city.latitude != 0 or city.longitude != 0:
             city.query_count += 1
             city.save()
-            return get_weather_forecast(city.latitude, city.longitud)
-    except BaseException:
+            return get_weather_forecast(city.latitude, city.longitude)
+    except BaseException as er:
         logging.info(f'Города {city_name} нет в базе')
 
     coordinates = get_coordinates(city_name)
