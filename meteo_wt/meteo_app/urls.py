@@ -22,5 +22,4 @@ app_name = 'meteo_app'
 urlpatterns = [
     path('', views.meteo_request, name='meteo_request'),
     path('stat/', views.user_stat_list, name='user_stat_list'),
-    path('stat_api/', views.city_stat_api, name='city_stat_api'),
 ]

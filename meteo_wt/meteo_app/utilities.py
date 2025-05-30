@@ -1,13 +1,14 @@
 import logging
 import requests
 from geopy.geocoders import Nominatim
+from .models import CityStat
 
 
 def get_coordinates(city_name: str) -> dict | None:
     """
     Получить координаты по названию города
     :param city_name: Название города
-    :return: 
+    :return: координаты - широта и долгота
     """
     try:
         geolocator = Nominatim(user_agent="weather-app")
@@ -27,7 +28,7 @@ def get_weather_forecast(latitude, longitude):
     Получить прогноз погоды
     :param latitude: широта
     :param longitude: долгота
-    :return:
+    :return: прогноз погоды или текст ошибки
     """
     base_url = "https://api.open-meteo.com/v1/forecast"
     params = {
@@ -62,10 +63,27 @@ def request_weather(city_name) -> list | str:
     :param city_name: Название города
     :return: прогноз погоды или текст ошибки
     """
+    try:
+        city = CityStat.object.get(city=city_name)
+        if city.latitude or city.longitude:
+            city.query_count += 1
+            city.save()
+            return get_weather_forecast(city.latitude, city.longitud)
+    except BaseException:
+        logging.info(f'Города {city_name} нет в базе')
+
     coordinates = get_coordinates(city_name)
     if not coordinates:
         return "Не удалось получить координаты города."
 
     lat = coordinates["latitude"]
     lon = coordinates["longitude"]
+    try:
+        city = CityStat.objects.get(city=city_name)
+        city.query_count += 1
+        city.latitude = lat
+        city.longitude = lon
+        city.save()
+    except BaseException as er:
+        CityStat.objects.create(city=city_name, latitude=lat, longitude=lon)
     return get_weather_forecast(lat, lon)

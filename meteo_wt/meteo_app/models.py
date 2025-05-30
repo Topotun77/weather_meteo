@@ -24,6 +24,8 @@ class UserStat(models.Model):
 class CityStat(models.Model):
     city = models.CharField(max_length=255)
     query_count = models.IntegerField(default=1)
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)
 
     class Meta:
         verbose_name = 'Статистика по городам'

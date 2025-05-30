@@ -6,7 +6,7 @@ from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 from .forms import SignUpForm, CityForm
-from .models import Preferences, UserStat, CityStat
+from .models import Preferences, UserStat
 from .utilities import request_weather
 
 
@@ -78,12 +78,6 @@ def meteo_request(request: HttpRequest):
                 stat.user = request.user
                 stat.city = city
                 stat.save()
-                try:
-                    stat_api = CityStat.objects.get(city=city)
-                    stat_api.query_count += 1
-                    stat_api.save()
-                except BaseException as er:
-                    CityStat.objects.create(city=city)
                 return render(request, 'meteo_request.html',
                               {
                                   'form': form,
@@ -104,15 +98,3 @@ def user_stat_list(request: HttpRequest):
     """
     user_stat = UserStat.objects.all()
     return render(request, 'user_statistic_list.html', {'user_stat': user_stat})
-
-
-def city_stat_api(request: HttpRequest):
-    """
-    Представление - API статистики по городам.
-    :param request: HttpRequest - запрос пользователя.
-    :return: Остаемся на странице.
-    """
-    city_stat = UserStat.objects.all()
-    return render(request, 'user_statistic_list.html', {'user_stat': user_stat})
-
-
